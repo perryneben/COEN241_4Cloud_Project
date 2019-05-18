@@ -1,0 +1,2 @@
+lengthFeet,speedLimitMph,numLanes,dividedTraffic,trafficLights,stopSigns,pedestrianCrossings,dayOfWeek,holiday,timeOfDay,cloudWeather,cloudTraffic,cloudEvent,localWeather,localTraffic,localEvent
+1000,25,1,0,0,1,
