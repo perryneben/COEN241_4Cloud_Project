@@ -80,6 +80,11 @@ trainingDataDefinition = {
 		"description": "Road blocking event on road from the local autonomous vehicle source.",
 		"values": "No Event=0, Road blocking event=1",
 		"exampleValue": 0
+	},
+	"travelTimeMinutes": {
+		"description": "Number of minutes taken to travel the road segment.",
+		"values": "Any positive integer.",
+		"exampleValue": 15
 	}
 }
 
