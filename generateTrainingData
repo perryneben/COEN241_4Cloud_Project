@@ -1,0 +1,40 @@
+#!/bin/python
+
+# In order to generate realistic training data for a road segment
+# we start with a randomly generated road segment length and speed limit.
+# Then a base travel time is calculated from those two data points.
+# The base travel time is then multipled by some factor based on each additional
+# variable that can affect the travel time.
+# Each variable and resulting factor is unique so the distribution of the value
+# of the factor will be dependent on the specific variable.
+
+# numLanes 		 	Value - Exponentially distributed from 1
+#            	  	Factor - More lanes means a factor closer to 1 when traffic is moderate to heavy.
+# dividedTraffic 	Value - Evenly distributed between 0 and 1.
+#                  	Factor - Divided traffice means a factor closer to 1 when traffic is moderate to heavy.
+# trafficLights  	Value - Exponentially distributed from 0.
+#                 	Factor - Fewer lights means a factor closer to 1.
+# stopSigns 		Value - Exponentially distributed from 0.
+#             		Factor - Fewer stops signs means a factor closer to 1.
+# stopSigns  		Value - Exponentially distributed from 0.
+#             		Factor - Fewer stops signs means a factor closer to 1.
+# pedCrossings		Value - Exponentially distributed from 0.
+# 					Factor - Fewer pedestrian crossings means a factor closer to 1.
+# dayOfWeek			Value - Evenly distributed.
+#					Factor - Rush hour during weekdays means higher factor.
+# holiday			Value - Random 1 out of 26 week days is a holiday.
+# 					Factor - Holiday negates rush hour during weekdays factor.
+# timeOfDay         Value - Normally distributed (small stdDev) at morning and evenings on week days, normally distributed (large stdDev) at mid-day on weekends.
+# 					Factor - Higher factor during peak drive times.
+# cloudWeather		Value - Exponentially distributed from 0 (none/clear)
+#					Factor - Higher factor with bad weather.
+# cloudTraffic		Value - Normally distributed around moderate traffic.
+#					Factor - Higher factor with heavier traffic.
+# cloudEvent		Value - 1 out of 200 chance of event.
+# 					Factor - High factor when event occurs, factor of 1 with no event.
+# localWeather		Value - Cloud weather with 1% chance of deviation by 1 value evenly distributed in either direction.
+#					Factor - Higher factor with bad weather.
+# localTraffic		Value - Cloud traffic with 1% chance of deviation by 1 value evenly distributed in either direction.
+#					Factor - Higher factor with heavier traffic.
+# localEvent		Value - 1 out of 200 chance of event.
+# 					Factor - High factor when event occurs, factor of 1 with no event.
