@@ -81,7 +81,7 @@ trainingDataDefinition = {
 		"values": "No Event=0, Road blocking event=1",
 		"exampleValue": 0
 	},
-	"travelTimeMinutes": {
+	"travelTimeSeconds": {
 		"description": "Number of minutes taken to travel the road segment.",
 		"values": "Any positive integer.",
 		"exampleValue": 15
