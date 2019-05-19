@@ -10,17 +10,15 @@
 
 # numLanes 		 	Value - Exponentially distributed from 1
 #            	  	Factor - More lanes means a factor closer to 1 when traffic is moderate to heavy.
-# dividedTraffic 	Value - Evenly distributed between 0 and 1.
+# dividedTraffic 	Value - Uniformly distributed between 0 and 1.
 #                  	Factor - Divided traffice means a factor closer to 1 when traffic is moderate to heavy.
 # trafficLights  	Value - Exponentially distributed from 0.
 #                 	Factor - Fewer lights means a factor closer to 1.
 # stopSigns 		Value - Exponentially distributed from 0.
 #             		Factor - Fewer stops signs means a factor closer to 1.
-# stopSigns  		Value - Exponentially distributed from 0.
-#             		Factor - Fewer stops signs means a factor closer to 1.
 # pedCrossings		Value - Exponentially distributed from 0.
 # 					Factor - Fewer pedestrian crossings means a factor closer to 1.
-# dayOfWeek			Value - Evenly distributed.
+# dayOfWeek			Value - Uniformly distributed.
 #					Factor - Rush hour during weekdays means higher factor.
 # holiday			Value - Random 1 out of 26 week days is a holiday.
 # 					Factor - Holiday negates rush hour during weekdays factor.
@@ -32,9 +30,143 @@
 #					Factor - Higher factor with heavier traffic.
 # cloudEvent		Value - 1 out of 200 chance of event.
 # 					Factor - High factor when event occurs, factor of 1 with no event.
-# localWeather		Value - Cloud weather with 1% chance of deviation by 1 value evenly distributed in either direction.
+# localWeather		Value - Cloud weather with 5% chance of deviation by 1 value uniformly distributed in either direction.
 #					Factor - Higher factor with bad weather.
-# localTraffic		Value - Cloud traffic with 1% chance of deviation by 1 value evenly distributed in either direction.
+# localTraffic		Value - Cloud traffic with 10% chance of deviation by 1 value uniformly distributed in either direction.
 #					Factor - Higher factor with heavier traffic.
 # localEvent		Value - 1 out of 200 chance of event.
 # 					Factor - High factor when event occurs, factor of 1 with no event.
+
+import random
+BLOCK_LENGTH = 300 # City blocks are about 300 feet
+
+# Get a random road segment legnth in blocks from 1-10.
+blocks = random.randint(1, 10)
+lengthFeet = blocks * BLOCK_LENGTH
+print("Blocks: %d" % blocks)
+
+# Evenly distributed speed limit from 15 to 55 MPH.
+speedLimit = random.randint(1,5)*10 + 5
+print("Speed limit: %d" % speedLimit)
+
+# Calculate the travel time in seconds from blocks and 
+baseTravelTimeSeconds = blocks * BLOCK_LENGTH / ((speedLimit * 5280) / 3600)
+print("Base travel time in seconds: %d" % baseTravelTimeSeconds)
+
+import numpy
+
+numLanes = int(round(numpy.random.exponential(scale=1.0, size=None))) + 1
+print("Number of lanes: %d" % numLanes)
+
+dividedTraffic = random.randint(0,1)
+print("Divided traffic: %s" % ("yes" if dividedTraffic else "no"))
+
+trafficLights = int(round(numpy.random.exponential(scale=1.0, size=None)))
+trafficLights = trafficLights if blocks > trafficLights else blocks
+print("Number of traffic lights: %d" % trafficLights)
+
+stopSigns = int(round(numpy.random.exponential(scale=1.0, size=None)))
+stopSigns = stopSigns if blocks > stopSigns + trafficLights else blocks - trafficLights
+print("Number of stop signs: %d" % stopSigns)
+
+pedCrossings = int(round(numpy.random.exponential(scale=1.0, size=None)))
+pedCrossings = pedCrossings if blocks > pedCrossings else blocks
+print("Number of pedestrian crossings: %d" % pedCrossings)
+
+dayOfWeek = random.randint(0,6)
+days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+print("Day of week: %s" % days[dayOfWeek])
+
+holiday = "yes" if dayOfWeek > 0 and dayOfWeek < 6 and random.randint(0,25) == 19 else "no"
+print("Holiday: %s" % holiday)
+
+timeOfDay = 0.0
+if dayOfWeek > 0 and dayOfWeek < 6:
+	# Weekdays: split the day 40% morning rush, 40% evening rush, 15% midday, 5% nighttime
+	daySplit = random.randint(0,19)
+	if daySplit < 8:
+		timeOfDay = numpy.random.normal(loc=8.0, scale=1.5, size=None)
+	elif daySplit < 16:
+		timeOfDay = numpy.random.normal(loc=17.0, scale=1.5, size=None)
+	elif daySplit < 19:
+		timeOfDay = numpy.random.uniform(low=9.5, high=15.5, size=None)
+	else:
+		# Split the remaining 5% into 4% late evening and 1% early morning.
+		nightSplit = random.randint(0,4)
+		if nightSplit < 4:
+			timeOfDay = numpy.random.uniform(low=19.5, high=24.0, size=None)
+		else:
+			timeOfDay = numpy.random.uniform(low=0.0, high=6.5, size=None)
+else:
+	# Weekend: Normally distributed around midday.
+	timeOfDay = numpy.random.normal(loc=12.0, scale=4.0, size=None)
+	
+timeOfDayMinutes = int(timeOfDay * 60)
+print("Time of day (minutes after midnight): %d" % timeOfDayMinutes)
+
+weather = ["Dry/Clear", "LightRain", "HeavyRain", "LightSnow", "HeavySnow", "Ice/DenseFog"]
+cloudWeather = int(round(numpy.random.exponential(scale=1.0, size=None)))
+if cloudWeather > 5:
+	cloudWeather = 5
+print("Cloud Weather: %s" % weather[cloudWeather])
+
+localWeather = cloudWeather
+# Five percent chance the local weather is one level different than cloud weather.
+if (random.randint(0,19) == 12):
+	if random.randint(0,1) == 0:
+		localWeather -= 1
+	else:
+		localWeather += 1
+if localWeather > 5:
+	localWeather = 5
+if localWeather < 0:
+	localWeather = 0
+print("Local Weather: %s" % weather[localWeather])
+
+traffic = ["None", "Little", "Moderate", "Heavy", "Gridlock"]
+# Depends on day of week, time of day and holiday.
+# For weekends and holidays, normally distribute around little during the day, none at night.
+# For weekdays, normally distribute around heavy during morning/evening rush, moderate during midday, little in the evenings, and none in the early morning.
+normDistMeanTraffic = 2.0
+if holiday == "yes" or dayOfWeek < 1 and dayOfWeek > 5:
+	if timeOfDay > 6 and timeOfDay < 18:
+		normDistMeanTraffic = 1.0
+	else:
+		normDistMeanTraffic = 0.0
+else:
+	if timeOfDay < 6.5:
+		normDistMeanTraffic = 0.0
+	elif timeOfDay < 9.5:
+		normDistMeanTraffic = 3.0
+	elif timeOfDay < 15.5:
+		normDistMeanTraffic = 2.0
+	elif timeOfDay < 18.5:
+		normDistMeanTraffic = 3.0
+	else:
+		normDistMeanTraffic = 1.0
+	
+cloudTraffic = int(numpy.random.normal(loc=normDistMeanTraffic, scale=1.0, size=None))
+if cloudTraffic > 5:
+	cloudTraffic = 5
+if cloudTraffic < 0:
+	cloudTraffic = 0
+print("Cloud Traffic: %s" % traffic[cloudTraffic])
+
+localTraffic = cloudTraffic
+# Five percent chance the local traffic is one level different than cloud traffic.
+if (random.randint(0,9) == 3):
+	if random.randint(0,1) == 0:
+		localTraffic -= 1
+	else:
+		localTraffic += 1
+if localTraffic > 5:
+	localTraffic = 5
+if localTraffic < 0:
+	localTraffic = 0
+print("Local Traffic: %s" % traffic[localTraffic])
+
+# 0.5% chance of a road closing event
+cloudEvent = "yes" if random.randint(0,199) == 58 else "no"
+print("Cloud event: %s" % cloudEvent)
+localEvent = "yes" if random.randint(0,199) == 129 else "no"
+print("Local event: %s" % localEvent)

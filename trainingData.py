@@ -48,8 +48,8 @@ trainingDataDefinition = {
 	},
 	"timeOfDay": {
 		"description": "Time of day in minutes after midnight.",
-		"values": "0-3599",
-		"exampleValue": 1830
+		"values": "0-1439",
+		"exampleValue": 540
 	},
 	"cloudWeather": {
 		"description": "Type of weather from the cloud service.",
