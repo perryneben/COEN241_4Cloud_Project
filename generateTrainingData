@@ -38,135 +38,200 @@
 # 					Factor - High factor when event occurs, factor of 1 with no event.
 
 import random
-BLOCK_LENGTH = 300 # City blocks are about 300 feet
-
-# Get a random road segment legnth in blocks from 1-10.
-blocks = random.randint(1, 10)
-lengthFeet = blocks * BLOCK_LENGTH
-print("Blocks: %d" % blocks)
-
-# Evenly distributed speed limit from 15 to 55 MPH.
-speedLimit = random.randint(1,5)*10 + 5
-print("Speed limit: %d" % speedLimit)
-
-# Calculate the travel time in seconds from blocks and 
-baseTravelTimeSeconds = blocks * BLOCK_LENGTH / ((speedLimit * 5280) / 3600)
-print("Base travel time in seconds: %d" % baseTravelTimeSeconds)
-
 import numpy
+import sys
+import time
 
-numLanes = int(round(numpy.random.exponential(scale=1.0, size=None))) + 1
-print("Number of lanes: %d" % numLanes)
+BLOCK_LENGTH = 300 # City blocks are about 300 feet.
+BASE_NUM_GEN = 500 # Generate 500 entries by default.
+DEBUG = False # Setting this to true turns on a bunch of print statements.
 
-dividedTraffic = random.randint(0,1)
-print("Divided traffic: %s" % ("yes" if dividedTraffic else "no"))
+start = time.time()
 
-trafficLights = int(round(numpy.random.exponential(scale=1.0, size=None)))
-trafficLights = trafficLights if blocks > trafficLights else blocks
-print("Number of traffic lights: %d" % trafficLights)
+if len(sys.argv) < 2:
+    print("Must provide csv file")
+    sys.exit(1)
 
-stopSigns = int(round(numpy.random.exponential(scale=1.0, size=None)))
-stopSigns = stopSigns if blocks > stopSigns + trafficLights else blocks - trafficLights
-print("Number of stop signs: %d" % stopSigns)
+csvPath = sys.argv[1]
+csvFile = open(csvPath, 'w')
 
-pedCrossings = int(round(numpy.random.exponential(scale=1.0, size=None)))
-pedCrossings = pedCrossings if blocks > pedCrossings else blocks
-print("Number of pedestrian crossings: %d" % pedCrossings)
+numToGenerate = BASE_NUM_GEN
+if len(sys.argv) == 3:
+    numToGenerate = int(sys.argv[2])
 
-dayOfWeek = random.randint(0,6)
-days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
-print("Day of week: %s" % days[dayOfWeek])
 
-holiday = "yes" if dayOfWeek > 0 and dayOfWeek < 6 and random.randint(0,25) == 19 else "no"
-print("Holiday: %s" % holiday)
+for x in range(numToGenerate):
+    if DEBUG: print("\nRound #%d" % x)
+    factor = 1.0
 
-timeOfDay = 0.0
-if dayOfWeek > 0 and dayOfWeek < 6:
-	# Weekdays: split the day 40% morning rush, 40% evening rush, 15% midday, 5% nighttime
-	daySplit = random.randint(0,19)
-	if daySplit < 8:
-		timeOfDay = numpy.random.normal(loc=8.0, scale=1.5, size=None)
-	elif daySplit < 16:
-		timeOfDay = numpy.random.normal(loc=17.0, scale=1.5, size=None)
-	elif daySplit < 19:
-		timeOfDay = numpy.random.uniform(low=9.5, high=15.5, size=None)
-	else:
-		# Split the remaining 5% into 4% late evening and 1% early morning.
-		nightSplit = random.randint(0,4)
-		if nightSplit < 4:
-			timeOfDay = numpy.random.uniform(low=19.5, high=24.0, size=None)
-		else:
-			timeOfDay = numpy.random.uniform(low=0.0, high=6.5, size=None)
-else:
-	# Weekend: Normally distributed around midday.
-	timeOfDay = numpy.random.normal(loc=12.0, scale=4.0, size=None)
-	
-timeOfDayMinutes = int(timeOfDay * 60)
-print("Time of day (minutes after midnight): %d" % timeOfDayMinutes)
+    # Get a random road segment legnth in blocks from 1-10.
+    blocks = random.randint(1, 10)
+    lengthFeet = blocks * BLOCK_LENGTH
+    if DEBUG: print("Blocks: %d" % blocks)
 
-weather = ["Dry/Clear", "LightRain", "HeavyRain", "LightSnow", "HeavySnow", "Ice/DenseFog"]
-cloudWeather = int(round(numpy.random.exponential(scale=1.0, size=None)))
-if cloudWeather > 5:
-	cloudWeather = 5
-print("Cloud Weather: %s" % weather[cloudWeather])
+    # Evenly distributed speed limit from 15 to 55 MPH.
+    speedLimit = random.randint(1,5)*10 + 5
+    if DEBUG: print("Speed limit: %d" % speedLimit)
 
-localWeather = cloudWeather
-# Five percent chance the local weather is one level different than cloud weather.
-if (random.randint(0,19) == 12):
-	if random.randint(0,1) == 0:
-		localWeather -= 1
-	else:
-		localWeather += 1
-if localWeather > 5:
-	localWeather = 5
-if localWeather < 0:
-	localWeather = 0
-print("Local Weather: %s" % weather[localWeather])
+    # Calculate the travel time in seconds from blocks and 
+    baseTravelTimeSeconds = int(blocks * BLOCK_LENGTH / ((speedLimit * 5280) / 3600))
+    if DEBUG: print("Base travel time in seconds: %d" % baseTravelTimeSeconds)
 
-traffic = ["None", "Little", "Moderate", "Heavy", "Gridlock"]
-# Depends on day of week, time of day and holiday.
-# For weekends and holidays, normally distribute around little during the day, none at night.
-# For weekdays, normally distribute around heavy during morning/evening rush, moderate during midday, little in the evenings, and none in the early morning.
-normDistMeanTraffic = 2.0
-if holiday == "yes" or dayOfWeek < 1 and dayOfWeek > 5:
-	if timeOfDay > 6 and timeOfDay < 18:
-		normDistMeanTraffic = 1.0
-	else:
-		normDistMeanTraffic = 0.0
-else:
-	if timeOfDay < 6.5:
-		normDistMeanTraffic = 0.0
-	elif timeOfDay < 9.5:
-		normDistMeanTraffic = 3.0
-	elif timeOfDay < 15.5:
-		normDistMeanTraffic = 2.0
-	elif timeOfDay < 18.5:
-		normDistMeanTraffic = 3.0
-	else:
-		normDistMeanTraffic = 1.0
-	
-cloudTraffic = int(numpy.random.normal(loc=normDistMeanTraffic, scale=1.0, size=None))
-if cloudTraffic > 5:
-	cloudTraffic = 5
-if cloudTraffic < 0:
-	cloudTraffic = 0
-print("Cloud Traffic: %s" % traffic[cloudTraffic])
+    numLanes = int(round(numpy.random.exponential(scale=1.0, size=None))) + 1
+    if DEBUG: print("Number of lanes: %d" % numLanes)
+    # No direct time factor from more lanes, influences traffic factor.
 
-localTraffic = cloudTraffic
-# Five percent chance the local traffic is one level different than cloud traffic.
-if (random.randint(0,9) == 3):
-	if random.randint(0,1) == 0:
-		localTraffic -= 1
-	else:
-		localTraffic += 1
-if localTraffic > 5:
-	localTraffic = 5
-if localTraffic < 0:
-	localTraffic = 0
-print("Local Traffic: %s" % traffic[localTraffic])
+    dividedTraffic = random.randint(0,1)
+    if DEBUG: print("Divided traffic: %d" % dividedTraffic)
+    if not dividedTraffic:
+        factor += 0.01 # 1% slower if not divided.
+    if DEBUG: print("Factor 1: %.2f" % factor)
 
-# 0.5% chance of a road closing event
-cloudEvent = "yes" if random.randint(0,199) == 58 else "no"
-print("Cloud event: %s" % cloudEvent)
-localEvent = "yes" if random.randint(0,199) == 129 else "no"
-print("Local event: %s" % localEvent)
+    trafficLights = int(round(numpy.random.exponential(scale=1.0, size=None)))
+    trafficLights = trafficLights if blocks > trafficLights else blocks
+    if DEBUG: print("Number of traffic lights: %d" % trafficLights)
+    if trafficLights:
+        factor += (trafficLights * 0.1) # 10% slower for each traffic light.
+    if DEBUG: print("Factor 1: %.2f" % factor)
+
+    stopSigns = int(round(numpy.random.exponential(scale=1.0, size=None)))
+    stopSigns = stopSigns if blocks > stopSigns + trafficLights else blocks - trafficLights
+    if DEBUG: print("Number of stop signs: %d" % stopSigns)
+    if stopSigns:
+        factor += (stopSigns * 0.25) # 25% slower for each stop sign.
+    if DEBUG: print("Factor 1: %.2f" % factor)
+
+    pedCrossings = int(round(numpy.random.exponential(scale=1.0, size=None)))
+    pedCrossings = pedCrossings if blocks > pedCrossings else blocks
+    if DEBUG: print("Number of pedestrian crossings: %d" % pedCrossings)
+    if pedCrossings:
+        factor += (pedCrossings * 0.05) # 5% slower for each pedestrian crossing.
+    if DEBUG: print("Factor 1: %.2f" % factor)
+
+    dayOfWeek = random.randint(0,6)
+    days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+    if DEBUG: print("Day of week: %s" % days[dayOfWeek])
+    # No direct factor for day of week since it is used to determine traffic.
+
+    holiday = 1 if dayOfWeek > 0 and dayOfWeek < 6 and random.randint(0,25) == 19 else 0
+    if DEBUG: print("Holiday: %d" % holiday)
+    # No direct factor for holiday since it is used to determine traffic.
+
+    timeOfDay = 0.0
+    if dayOfWeek > 0 and dayOfWeek < 6:
+        # Weekdays: split the day 40% morning rush, 40% evening rush, 15% midday, 5% nighttime
+        daySplit = random.randint(0,19)
+        if daySplit < 8:
+            timeOfDay = numpy.random.normal(loc=8.0, scale=1.5, size=None)
+        elif daySplit < 16:
+            timeOfDay = numpy.random.normal(loc=17.0, scale=1.5, size=None)
+        elif daySplit < 19:
+            timeOfDay = numpy.random.uniform(low=9.5, high=15.5, size=None)
+        else:
+            # Split the remaining 5% into 4% late evening and 1% early morning.
+            nightSplit = random.randint(0,4)
+            if nightSplit < 4:
+                timeOfDay = numpy.random.uniform(low=19.5, high=24.0, size=None)
+            else:
+                timeOfDay = numpy.random.uniform(low=0.0, high=6.5, size=None)
+    else:
+        # Weekend: Normally distributed around midday.
+        timeOfDay = numpy.random.normal(loc=12.0, scale=4.0, size=None)
+    timeOfDayMinutes = int(timeOfDay * 60)
+    if DEBUG: print("Time of day (minutes after midnight): %d" % timeOfDayMinutes)
+    # No direct factor for holiday since it is used to determine traffic.
+
+    weather = ["Dry/Clear", "LightRain", "HeavyRain", "LightSnow", "HeavySnow", "Ice/DenseFog"]
+    cloudWeather = int(round(numpy.random.exponential(scale=1.0, size=None)))
+    if cloudWeather > 5:
+        cloudWeather = 5
+    if DEBUG: print("Cloud Weather: %s" % weather[cloudWeather])
+
+    localWeather = cloudWeather
+    # Five percent chance the local weather is one level different than cloud weather.
+    if (random.randint(0,19) == 12):
+        if random.randint(0,1) == 0:
+            localWeather -= 1
+        else:
+            localWeather += 1
+    if localWeather > 5:
+        localWeather = 5
+    if localWeather < 0:
+        localWeather = 0
+    if DEBUG: print("Local Weather: %s" % weather[localWeather])
+    weatherCombined = cloudWeather + localWeather
+    if weatherCombined:
+        factor += (weatherCombined * 0.25) # Each weather point from 0 to 10, increases travel time by 25%.
+                                           # If both local and weather are the worst, 250% travel time.
+
+    traffic = ["None", "Little", "Moderate", "Heavy", "Gridlock"]
+    # Depends on day of week, time of day and holiday.
+    # For weekends and holidays, normally distribute around little during the day, none at night.
+    # For weekdays, normally distribute around heavy during morning/evening rush, moderate during midday,
+    # little in the evenings, and none in the early morning.
+    normDistMeanTraffic = 2.0
+    if holiday == "yes" or dayOfWeek < 1 and dayOfWeek > 5:
+        if timeOfDay > 6 and timeOfDay < 18:
+            normDistMeanTraffic = 1.0
+        else:
+            normDistMeanTraffic = 0.0
+    else:
+        if timeOfDay < 6.5:
+            normDistMeanTraffic = 0.0
+        elif timeOfDay < 9.5:
+            normDistMeanTraffic = 3.0
+        elif timeOfDay < 15.5:
+            normDistMeanTraffic = 2.0
+        elif timeOfDay < 18.5:
+            normDistMeanTraffic = 3.0
+        else:
+            normDistMeanTraffic = 1.0
+
+    cloudTraffic = int(numpy.random.normal(loc=normDistMeanTraffic, scale=1.0, size=None))
+    if cloudTraffic > 4:
+        cloudTraffic = 4
+    if cloudTraffic < 0:
+        cloudTraffic = 0
+    if DEBUG: print("Cloud Traffic: %s" % traffic[cloudTraffic])
+
+    localTraffic = cloudTraffic
+    # Five percent chance the local traffic is one level different than cloud traffic.
+    if (random.randint(0,9) == 3):
+        if random.randint(0,1) == 0:
+            localTraffic -= 1
+        else:
+            localTraffic += 1
+    if localTraffic > 4:
+        localTraffic = 4
+    if localTraffic < 0:
+        localTraffic = 0
+    if DEBUG: print("Local Traffic: %s" % traffic[localTraffic])
+
+    # The traffic score is max 8, and lowered by divided road and more than one lane.
+    trafficScore = cloudTraffic + localTraffic - dividedTraffic - (numLanes - 1)
+    if trafficScore > 0:
+        factor += trafficScore * 0.2 # 20% longer per traffic point, max 160%.
+    if DEBUG: print("Factor 1: %.2f" % factor)
+
+    # 0.5% chance of a road closing event
+    cloudEvent = 1 if random.randint(0,199) == 58 else 0
+    if DEBUG: print("Cloud event: %d" % cloudEvent)
+    localEvent = 1 if random.randint(0,199) == 129 else 0
+    if DEBUG: print("Local event: %d" % localEvent)
+    if cloudEvent or localEvent:
+        factor += 5 # 10x travel time when there's a road closing event
+    if DEBUG: print("Factor 1: %.2f" % factor)
+
+    if DEBUG: print("Travel time factor: %f" % factor)
+    actualTravelTimeSeconds = int(baseTravelTimeSeconds * factor)
+    if DEBUG: print("Actual travel time: %d" % actualTravelTimeSeconds)
+    if DEBUG: print("Actual-Base travel time delta: %d" % (actualTravelTimeSeconds - baseTravelTimeSeconds))
+    
+    csvFile.write("%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d\n" % (lengthFeet, speedLimit,
+                  numLanes, dividedTraffic, trafficLights, stopSigns, pedCrossings, dayOfWeek, holiday,
+                  timeOfDayMinutes, cloudWeather, cloudTraffic, cloudEvent, localWeather, localTraffic,
+                  localEvent, actualTravelTimeSeconds))
+
+csvFile.close()
+end = time.time()
+print("Time to generate %d samples is %d" % (numToGenerate, (end - start)))
