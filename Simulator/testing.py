@@ -4,17 +4,6 @@ from locationInitializer import *
 from helperFunctions import *
 
 
-'''
-for x in city_map:
-    print('Node name is: ', x.getName())
-    print('It has the following neighbors, distance, and time')
-    for i in range(len(x.neighbors)):
-        if x.neighbors[i]:
-            print(x.neighbors[i].name, x.distances[i], x.times[i])
-        else:
-            print('None', x.distances[i], x.times[i])
-'''
-
 start_point = input('Please enter the start point: ')
 end_point = input('Please enter the end point: ')
 
@@ -47,12 +36,6 @@ print('Route start node: ', startNode.name)
 print('Route end node: ', endNode.name)
 print('Route: ', route(endNode))
 print('Total distance: ', endNode.totalDistance)
-
-'''
-for i in range(len(city_map)):
-    #print(city_map[i].name, 'total distance: ', city_map[i].totalDistance,
-     #       'previousNode: ', city_map[i].previousNode.name)
-'''
 
 
 

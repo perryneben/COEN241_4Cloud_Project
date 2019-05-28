@@ -14,7 +14,6 @@ class locationNode:
         self.name = name
         self.speedLimit = speedLimit
         
-        
         self.neighbors = [] # list of neighbor nodes
         self.distances = [] # list of distances to neighbors
         self.times = [] # list of times to reach desired neighbors
