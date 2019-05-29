@@ -15,11 +15,11 @@ b3 = locationNode('b3', 25)
 b4 = locationNode('b4', 25)
 
 c1 = locationNode('c1', 25)
-c2 = locationNode('c2', 25)
+c2 = locationNode('c2', 55)
 c3 = locationNode('c3', 35)
 c4 = locationNode('c4', 45)
 
-d1 = locationNode('d1', 35)
+d1 = locationNode('d1', 10)
 d2 = locationNode('d2', 25)
 d3 = locationNode('d3', 15)
 d4 = locationNode('d4', 45)

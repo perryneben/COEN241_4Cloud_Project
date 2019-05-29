@@ -1,18 +1,19 @@
 # Node class for the map
 
 class locationNode:
-    name = ''
-    
-    # for use with Dijkstra Algorithm
-    previousNode = None
-    totalDistance = float('Inf')
-    totalTime = float('Inf')
-    visited = False
-    
     # initializer
     def __init__(self, name, speedLimit):
         self.name = name
         self.speedLimit = speedLimit
+        self.weather = ''
+        self.traffic = ''
+        self.timeOfDay = ''
+        self.dayOfWeek = ''
+        self.holiday = ''
+        self.closure = ''
+        
+        self.usingTime = False
+        self.usingDistance = False
         
         self.neighbors = [] # list of neighbor nodes
         self.distances = [] # list of distances to neighbors
@@ -34,6 +35,10 @@ class locationNode:
     
     # overloaded operator for use with priority queue
     def __lt__(self, other):
+        # check what is being used for comparison
+        if self.usingTime:
+            return self.totalTime < other.totalTime
+        # default assumption is distance
         return self.totalDistance < other.totalDistance
     
     # this function sets the speed limit at the node
@@ -64,10 +69,6 @@ class locationNode:
     def setNodeClosure(self, closure):
         self.closure = closure
     
-    # this function gets the name of the node
-    def getName(self):
-        return self.name
-    
     # this function will calculate the time it takes to get from one node to another
     def calcTravelTime(self, distance, speed):
         # time = distance/speed
@@ -77,59 +78,18 @@ class locationNode:
         time = float(distance) / float(speed)
         return round(float(time * 60), 2)
     
-    # this function gets the northern neighbor
-    def getNorthNeighbor(self):
-        return self.neighbors[0]
-    
-    def getNorthDistance(self):
-        return self.distances[0]
-    
-    def getNorthTime(self):
-        return self.times[0]
-    
-    # this function gets the southern neighbor
-    def getSouthNeighbor(self):
-        return self.neighbors[1]
-    
-    def getSouthDistance(self):
-        return self.distances[1]
-    
-    def getSouthTime(self):
-        return self.times[1]
-    
-    # this function gets the eastern neighbor
-    def getEastNeighbor(self):
-        return self.neighbors[2]
-    
-    def getEastDistance(self):
-        return self.distances[2]
-    
-    def getEastTime(self):
-        return self.times[2]
-    
-    # this function gets the western neighbor
-    def getWestNeighbor(self):
-        return self.neighbors[3]
-    
-    def getWestDistance(self):
-        return self.distances[3]
-    
-    def getWestTime(self):
-        return self.times[3]
-    
-    # this function will get the speed limit at the node
-    def getSpeedLimit(self):
-        return self.speedLimit
-    
-    # this function gets the weather at the node
-    def getWeather(self):
-        return self.weather
-    
-    # this function gets the traffic at the node
-    def getTraffic(self):
-        return self.traffic
-    
-
+    def printNodeAttributes(self):
+        print('(1) Name: ', self.name)
+        print('(2) Speed Limit: ', self.speedLimit)
+        print('(3) Weather: ', self.weather)
+        print('(4) Traffic: ', self.weather)
+        print('(5) Time of Day: ', self.timeOfDay)
+        print('(6) Day of Week: ', self.dayOfWeek)
+        print('(7) Holiday: ', self.holiday)
+        print('(8) Closure: ', self.closure)
+        
+        print('total time: ', self.totalTime)
+        print('visited = ', self.visited)
     
     
     
