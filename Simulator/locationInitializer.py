@@ -28,28 +28,21 @@ city_map = (a1, a2, a3, a4, b1, b2, b3, b4,
             c1, c2, c3, c4, d1, d2, d3, d4)
 
 # Set the neighbors for the A nodes
-#a1.setNeighbor(None, 'Inf')
 a1.setNeighbor(a2, 1)
 a1.setNeighbor(b1, 7)
-#a1.setNeighbor(None, 'Inf')
 
 a2.setNeighbor(a1, 1)
 a2.setNeighbor(a3, 3)
 a2.setNeighbor(b2, 6)
-#a2.setNeighbor(None, 'Inf')
 
 a3.setNeighbor(a2, 3)
 a3.setNeighbor(a4, 12)
 a3.setNeighbor(b3, 8)
-#a3.setNeighbor(None, 'Inf')
 
 a4.setNeighbor(a3, 12)
-#a4.setNeighbor(None, 'Inf')
 a4.setNeighbor(b4, 15)
-#a4.setNeighbor(None, 'Inf')
 
 # Set the neighbors for the B nodes
-#b1.setNeighbor(None, 'Inf')
 b1.setNeighbor(b2, 12)
 b1.setNeighbor(c1, 6)
 b1.setNeighbor(a1, 7)
@@ -65,12 +58,10 @@ b3.setNeighbor(c3, 23)
 b3.setNeighbor(a3, 8)
 
 b4.setNeighbor(b3, 7)
-#b4.setNeighbor(None, 'Inf')
 b4.setNeighbor(c4, 17)
 b4.setNeighbor(a4, 15)
 
 # Set the neighbors for the C nodes
-#c1.setNeighbor(None, 'Inf')
 c1.setNeighbor(c2, 22)
 c1.setNeighbor(d1, 9)
 c1.setNeighbor(b1, 6)
@@ -86,27 +77,20 @@ c3.setNeighbor(d3, 9)
 c3.setNeighbor(b3, 23)
 
 c4.setNeighbor(c3, 19)
-#c4.setNeighbor(None, 'Inf')
 c4.setNeighbor(d4, 9)
 c4.setNeighbor(b4, 17)
 
 # Set the neighbors for the D nodes
-#d1.setNeighbor(None, 'Inf')
 d1.setNeighbor(d2, 9)
-#d1.setNeighbor(None, 'Inf')
 d1.setNeighbor(c1, 9)
 
 d2.setNeighbor(d1, 15)
 d2.setNeighbor(d3, 5)
-#d2.setNeighbor(None, 'Inf')
 d2.setNeighbor(c2, 9)
 
 d3.setNeighbor(d2, 9)
 d3.setNeighbor(d4, 11)
-#d3.setNeighbor(None, 'Inf')
 d3.setNeighbor(c3, 9)
 
 d4.setNeighbor(d3, 8)
-#d4.setNeighbor(None, 'Inf')
-#d4.setNeighbor(None, 'Inf')
 d4.setNeighbor(c4, 9)

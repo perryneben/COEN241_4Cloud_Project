@@ -4,6 +4,7 @@ class locationNode:
     # initializer
     def __init__(self, name, speedLimit):
         self.name = name
+        # speed limit is MPH
         self.speedLimit = speedLimit
         self.weather = ''
         self.traffic = ''
@@ -15,9 +16,14 @@ class locationNode:
         self.usingTime = False
         self.usingDistance = False
         
-        self.neighbors = [] # list of neighbor nodes
-        self.distances = [] # list of distances to neighbors
-        self.times = [] # list of times to reach desired neighbors
+        # this is just a list of the neighbor nodes
+        self.neighbors = []
+        
+        # list of distance in feet to each neighbor
+        self.distances = []
+        
+        # list of travel time in minutes to each neighbor
+        self.times = []
         
         self.previousNode = None
         self.totalDistance = float('Inf')
@@ -27,12 +33,8 @@ class locationNode:
     def setNeighbor(self, neighbor, dist):
         self.neighbors.append(neighbor)
         self.distances.append(dist)
-        
-        if neighbor:
-            self.times.append(self.calcTravelTime(dist, self.speedLimit))
-        else:
-            self.times.append('Inf')
-    
+        self.times.append(self.calcTravelTime(dist))
+
     # overloaded operator for use with priority queue
     def __lt__(self, other):
         # check what is being used for comparison
@@ -43,6 +45,7 @@ class locationNode:
     
     # this function sets the speed limit at the node
     def setSpeedLimit(self, speedLimit):
+        # set the speed limit
         self.speedLimit = speedLimit
     
     # this function sets the weather conditions at the node
@@ -70,26 +73,24 @@ class locationNode:
         self.closure = closure
     
     # this function will calculate the time it takes to get from one node to another
-    def calcTravelTime(self, distance, speed):
+    def calcTravelTime(self, distance):
         # time = distance/speed
         # time is set in minutes
         # speed is mph
         # distance is miles
-        time = float(distance) / float(speed)
+        time = float(distance) / float(self.speedLimit)
         return round(float(time * 60), 2)
     
     def printNodeAttributes(self):
-        print('(1) Name: ', self.name)
-        print('(2) Speed Limit: ', self.speedLimit)
-        print('(3) Weather: ', self.weather)
-        print('(4) Traffic: ', self.weather)
-        print('(5) Time of Day: ', self.timeOfDay)
-        print('(6) Day of Week: ', self.dayOfWeek)
-        print('(7) Holiday: ', self.holiday)
-        print('(8) Closure: ', self.closure)
-        
-        print('total time: ', self.totalTime)
-        print('visited = ', self.visited)
+        print('Name: ', self.name)
+        print('(1) Speed Limit: ', self.speedLimit)
+        print('(2) Weather: ', self.weather)
+        print('(3) Traffic: ', self.weather)
+        print('(4) Time of Day: ', self.timeOfDay)
+        print('(5) Day of Week: ', self.dayOfWeek)
+        print('(6) Holiday: ', self.holiday)
+        print('(7) Closure: ', self.closure)
+    
     
     
     
