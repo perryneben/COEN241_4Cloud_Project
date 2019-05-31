@@ -118,8 +118,13 @@ def changeNodeParameters():
             numberChange = input('Please input the desired number of the attribute you wish to change: [q to quit] ')
             # speed limit
             if numberChange == '1':
-                newSpeedLimit = input('Please enter the new speed limit: ')
-                nodeChange.speedLimit = int(newSpeedLimit)
+                # prevent user from inputing a negative number for speed limit
+                newSpeedLimit = '0'
+                while 1 > int(newSpeedLimit):
+                    newSpeedLimit = input('Please enter the new speed limit: ')
+                    nodeChange.speedLimit = int(newSpeedLimit)
+                    if 1 > int(newSpeedLimit):
+                        print('Invalid speed limit.  Must be positive')
                 
                 # recalculate travel times for all nodes
                 recalculateTravelTimes()
