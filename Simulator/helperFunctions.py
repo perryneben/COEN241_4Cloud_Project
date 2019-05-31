@@ -67,6 +67,8 @@ def dijkstra_time(node):
     for i in range(len(node.neighbors)):
         n = node.neighbors[i]
         t = node.times[i]
+        if n.closure:
+            continue
         if n.totalTime > (t + node.totalTime):
             n.previousNode = node
             n.totalTime = t + node.totalTime
@@ -157,7 +159,12 @@ def changeNodeParameters():
                 validNumberSelection = True
             # closure
             elif numberChange == '7':
-                newClosure = input('Please enter the new closure status of the node: ')
+                newClosure = input('Please enter the new closure status of the node:[y/n] ')
+                
+                if 'y' == newClosure or 'Y' == newClosure:
+                    nodeChange.closure = True
+                else:
+                    nodeChange.closure = False
                 
                 validNumberSelection = True
             # check if the user wants to quit

@@ -18,36 +18,6 @@ print('Your end point is: ' + end_point)
 startNode = findNodeByName(start_point)
 endNode = findNodeByName(end_point)
 
-'''
-# try dijkstra
-useDijkstraDistance()
-startNode.previousNode = startNode
-startNode.totalDistance = 0
-dijkstra_distance(startNode)
-
-# try and get the shortest path
-print('Route: ', route(endNode))
-print('Total distance: ', endNode.totalDistance)
-'''
-
-'''
-# reset the nodes
-resetNodes()
-useDijkstraTime()
-startNode.previousNode = startNode
-startNode.totalTime = 0
-dijkstra_time(startNode)
-
-# Let user know the entered start and end points
-print('Your start point is: ' + start_point)
-print('Your end point is: ' + end_point)
-
-# try and get the shortest path
-print('Route: ', route(endNode))
-print('Total time: ', endNode.totalTime)
-
-'''
-
 
 #changeNodeParameters()
 
@@ -70,7 +40,7 @@ while startNode != endNode:
 
     # try and get the shortest path
     print('\nCurrent Planned Route: ', currentRoute)
-    print('Current Planned travel time: ', endNode.totalTime)
+    print('Current Planned travel time: ', round(endNode.totalTime, 2))
 
     if currentRoute:
         # set the next node as the new start to simulate having traveled there
