@@ -50,9 +50,13 @@ def dijkstra_distance(node):
     for i in range(len(node.neighbors)):
         n = node.neighbors[i]
         d = node.distances[i]
+        t = node.times[i]
+        if n.closure:
+            continue
         if n.totalDistance > (d + node.totalDistance):
             n.previousNode = node
             n.totalDistance = d + node.totalDistance
+            n.distanceTime = t + node.distanceTime
             heappush(pq, (n.totalDistance, n))
                 
     node.visited = True
@@ -92,7 +96,7 @@ def route(endNode):
 # this function allows a user to change a node parameters
 def changeNodeParameters():
     answer = input('Would you like to change any conditions for the points in the city?[Y/N]: ')
-    if 'Y' != answer or 'y' != answer:
+    if 'Y' != answer and 'y' != answer:
         return
     
     print('Nodes in the city: ')
@@ -113,6 +117,7 @@ def changeNodeParameters():
         # get the node itself
         nodeChange = findNodeByName(nodeChangeName)
         nodeChange.printNodeAttributes()
+        
         # get the number selection from the user
         validNumberSelection = False
         while not validNumberSelection:
@@ -138,7 +143,7 @@ def changeNodeParameters():
             # traffic
             elif numberChange == '3':
                 newTraffic = input('Please enter the new traffic conditions: ')
-                self.setTraffic(newTraffic)
+                nodeChange.setTraffic(newTraffic)
                 validNumberSelection = True
             # time of day
             elif numberChange == '4':
@@ -162,6 +167,7 @@ def changeNodeParameters():
                     nodeChange.closure = True
                 else:
                     nodeChange.closure = False
+                
                 validNumberSelection = True
             # check if the user wants to quit
             elif numberChange == 'q':

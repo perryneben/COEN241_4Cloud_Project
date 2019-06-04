@@ -12,22 +12,20 @@ class locationNode:
         self.dayOfWeek = ''
         self.holiday = ''
         self.closure = ''
-        
         self.usingTime = False
         self.usingDistance = False
         
         # this is just a list of the neighbor nodes
         self.neighbors = []
-        
         # list of distance in feet to each neighbor
         self.distances = []
-        
         # list of travel time in minutes to each neighbor
         self.times = []
         
         self.previousNode = None
         self.totalDistance = float('Inf')
         self.totalTime = float('Inf')
+        self.distanceTime = float('Inf')
         self.visited = False
     
     def setNeighbor(self, neighbor, dist):
@@ -53,19 +51,19 @@ class locationNode:
         self.weather = weather
         if weather == '1':
             for x in self.times:
-                x += 2
+                x += 1
         elif weather == '2':
             for x in self.times:
-                x += 4
+                x += 2
         elif weather == '3':
             for x in self.times:
-                x += 6
+                x += 3
         elif weather == '4':
             for x in self.times:
-                x += 8
+                x += 4
         elif weather == '5':
             for x in self.times:
-                x += 10
+                x += 5
     
     # this function sets the traffic conditions at the node
     def setTraffic(self, traffic):
@@ -85,7 +83,7 @@ class locationNode:
         elif traffic == '5':
             for x in self.times:
                 x += 10
-    
+
     # this function sets the time of day it is at the node
     def setTimeOfDay(self, timeOfDay):
         self.timeOfDay = timeOfDay

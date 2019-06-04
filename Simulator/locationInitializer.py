@@ -1,5 +1,6 @@
 # This file will contain all of the initialization information for each of the location nodes of the simulator
 from locationNode import *
+import random
 
 locationNames = ('a0', 'a1', 'a2', 'a3', 'a4', 'a5', 'a6', 'a7', 'a8',
                  'b0', 'b1', 'b2', 'b3', 'b4', 'b5', 'b6', 'b7', 'b8',
@@ -679,5 +680,10 @@ l7.setNeighbor(l8, 14)
 l8.setNeighbor(l7, 14)
 l8.setNeighbor(k8, 7)
 
-
+# randomly assign traffic and weather variables to each node between 0-5
+for x in city_map:
+    t = random.randint(0, 5)
+    w = random.randint(0, 5)
+    x.setTraffic(t)
+    x.setWeather(w)
 

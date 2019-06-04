@@ -18,14 +18,22 @@ print('Your end point is: ' + end_point)
 startNode = findNodeByName(start_point)
 endNode = findNodeByName(end_point)
 
-
-#changeNodeParameters()
-
 traveledRoute = []
 
 # add node the the route being traveled
 traveledRoute.append((startNode.name, 0))
 
+useDijkstraDistance()
+startNode.previousNode = startNode
+startNode.totalDistance = 0
+startNode.totalTime = 0
+startNode.distanceTime = 0
+dijkstra_time(startNode)
+dijkstra_distance(startNode)
+nodesTraveled = route(endNode)
+
+print('Final Route: ', nodesTraveled)
+print('Total time traveled: ', round(endNode.distanceTime, 2))
 
 while startNode != endNode:
     # reset the nodes to enable the user to alter the parameters of the node
@@ -33,7 +41,6 @@ while startNode != endNode:
     useDijkstraTime()
     startNode.previousNode = startNode
     startNode.totalTime = 0
-    
     dijkstra_time(startNode)
     currentRoute = route(endNode)
 
@@ -58,10 +65,3 @@ for x in traveledRoute:
 
 print('Final Route: ', finalRoute)
 print('Total time traveled: ', round(finalTime, 2))
-
-
-
-
-
-
-
