@@ -35,7 +35,6 @@ while startNode != endNode:
     startNode.totalTime = 0
     
     dijkstra_time(startNode)
-
     currentRoute = route(endNode)
 
     # try and get the shortest path

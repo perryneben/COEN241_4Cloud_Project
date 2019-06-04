@@ -51,10 +51,40 @@ class locationNode:
     # this function sets the weather conditions at the node
     def setWeather(self, weather):
         self.weather = weather
+        if weather == '1':
+            for x in self.times:
+                x += 2
+        elif weather == '2':
+            for x in self.times:
+                x += 4
+        elif weather == '3':
+            for x in self.times:
+                x += 6
+        elif weather == '4':
+            for x in self.times:
+                x += 8
+        elif weather == '5':
+            for x in self.times:
+                x += 10
     
     # this function sets the traffic conditions at the node
     def setTraffic(self, traffic):
         self.traffic = traffic
+        if traffic == '1':
+            for x in self.times:
+                x += 2
+        elif traffic == '2':
+            for x in self.times:
+                x += 4
+        elif traffic == '3':
+            for x in self.times:
+                x += 6
+        elif traffic == '4':
+            for x in self.times:
+                x += 8
+        elif traffic == '5':
+            for x in self.times:
+                x += 10
     
     # this function sets the time of day it is at the node
     def setTimeOfDay(self, timeOfDay):

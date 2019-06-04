@@ -92,7 +92,7 @@ def route(endNode):
 # this function allows a user to change a node parameters
 def changeNodeParameters():
     answer = input('Would you like to change any conditions for the points in the city?[Y/N]: ')
-    if 'N' == answer or 'n' == answer:
+    if 'Y' != answer or 'y' != answer:
         return
     
     print('Nodes in the city: ')
@@ -113,7 +113,6 @@ def changeNodeParameters():
         # get the node itself
         nodeChange = findNodeByName(nodeChangeName)
         nodeChange.printNodeAttributes()
-        
         # get the number selection from the user
         validNumberSelection = False
         while not validNumberSelection:
@@ -130,42 +129,39 @@ def changeNodeParameters():
                 
                 # recalculate travel times for all nodes
                 recalculateTravelTimes()
-                
                 validNumberSelection = True
             # weather
             elif numberChange == '2':
                 newWeather = input('Please enter the new weather conditions: ')
-                
+                self.setWeather(newWeather)
                 validNumberSelection = True
             # traffic
             elif numberChange == '3':
                 newTraffic = input('Please enter the new traffic conditions: ')
-                
+                self.setTraffic(newTraffic)
                 validNumberSelection = True
             # time of day
             elif numberChange == '4':
                 newTimeOfDay = input('Please enter the new time of day: ')
-                
+                self.setTimeOfDay(newTimeOfDay)
                 validNumberSelection = True
             # day of week
             elif numberChange == '5':
                 newDayOfWeek = input('Please enter the new day of the week: ')
-                
+                self.setDayOfWeek(newDayOfWeek)
                 validNumberSelection = True
             # holiday
             elif numberChange == '6':
                 newHoliday = input('Please enter if it is a holiday: ')
-                
+                self.setHoliday(newHoliday)
                 validNumberSelection = True
             # closure
             elif numberChange == '7':
                 newClosure = input('Please enter the new closure status of the node:[y/n] ')
-                
                 if 'y' == newClosure or 'Y' == newClosure:
                     nodeChange.closure = True
                 else:
                     nodeChange.closure = False
-                
                 validNumberSelection = True
             # check if the user wants to quit
             elif numberChange == 'q':
