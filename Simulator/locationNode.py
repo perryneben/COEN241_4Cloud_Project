@@ -1,5 +1,5 @@
 # Node class for the map
-
+import datetime
 class locationNode:
     # initializer
     def __init__(self, name, speedLimit):
@@ -8,10 +8,10 @@ class locationNode:
         self.speedLimit = speedLimit
         self.weather = ''
         self.traffic = ''
-        self.timeOfDay = ''
-        self.dayOfWeek = ''
-        self.holiday = ''
-        self.closure = ''
+        self.timeOfDay = datetime.datetime.now()
+        self.dayOfWeek = str(datetime.datetime.today().weekday())
+        self.holiday = False
+        self.closure = False
         self.usingTime = False
         self.usingDistance = False
         

@@ -137,28 +137,34 @@ def changeNodeParameters():
                 validNumberSelection = True
             # weather
             elif numberChange == '2':
-                newWeather = input('Please enter the new weather conditions: ')
-                self.setWeather(newWeather)
+                newWeather = input('Please enter the new weather conditions'
+                                   '(Dry/Clear=0, LightRain=1, HeavyRain=2, LightSnow=3, HeavySnow=4, Ice/DenseFog=5): ')
+                nodeChange.setWeather(newWeather)
                 validNumberSelection = True
             # traffic
             elif numberChange == '3':
-                newTraffic = input('Please enter the new traffic conditions: ')
+                newTraffic = input('Please enter the new traffic conditions'
+                                   '(None=0, Little=1, Moderate=2, Heavy=3, Gridlock=4): ')
                 nodeChange.setTraffic(newTraffic)
                 validNumberSelection = True
             # time of day
             elif numberChange == '4':
                 newTimeOfDay = input('Please enter the new time of day: ')
-                self.setTimeOfDay(newTimeOfDay)
+                nodeChange.setTimeOfDay(newTimeOfDay)
                 validNumberSelection = True
             # day of week
             elif numberChange == '5':
-                newDayOfWeek = input('Please enter the new day of the week: ')
-                self.setDayOfWeek(newDayOfWeek)
+                newDayOfWeek = input('Please enter the new day of the week(M=0, Tu=1, W=2, Th=3, F=4, Sa=5, Su=6): ')
+                nodeChange.setDayOfWeek(newDayOfWeek)
                 validNumberSelection = True
             # holiday
             elif numberChange == '6':
-                newHoliday = input('Please enter if it is a holiday: ')
-                self.setHoliday(newHoliday)
+                newHoliday = input('Please enter if it is a holiday:[y/n] ')
+                if 'y' == newHoliday or 'Y' == newHoliday:
+                    nodeChange.holiday = True
+                else:
+                    nodeChange.holiday = False
+
                 validNumberSelection = True
             # closure
             elif numberChange == '7':
