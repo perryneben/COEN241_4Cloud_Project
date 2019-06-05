@@ -113,7 +113,7 @@ class locationNode:
         print('Name: ', self.name)
         print('(1) Speed Limit: ', self.speedLimit)
         print('(2) Weather: ', self.weather)
-        print('(3) Traffic: ', self.weather)
+        print('(3) Traffic: ', self.traffic)
         print('(4) Time of Day: ', self.timeOfDay)
         print('(5) Day of Week: ', self.dayOfWeek)
         print('(6) Holiday: ', self.holiday)
