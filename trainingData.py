@@ -88,5 +88,17 @@ trainingDataDefinition = [
 	}
 ]
 
-import pprint
-pprint.pprint(trainingDataDefinition, width=120)
+def printDefinition():
+    import pprint
+    pprint.pprint(trainingDataDefinition, width=120)
+    
+def getNames():
+    names = []
+    for variable in trainingDataDefinition:
+        names.append(variable['name'])
+    return names
+
+def printVars(vars):
+    names = getNames()
+    for i in range(len(vars)):
+        print("%s: %d" % (names[i], vars[i]))
