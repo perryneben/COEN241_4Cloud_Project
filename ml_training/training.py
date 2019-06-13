@@ -1,5 +1,6 @@
-from __future__ import print_function
+;from __future__ import print_function
 import math
+import sys
 from matplotlib import pyplot as plt
 import numpy as np
 import pandas as pd
@@ -7,6 +8,11 @@ from sklearn import metrics
 import tensorflow as tf
 from tensorflow.python.data import Dataset
 import feature as f
+from sklearn.metrics import r2_score
+
+predict_dataframe = pd.read_csv("prediction.csv", sep=",")
+predict_examples = f.preprocess_features(predict_dataframe)
+predict_targets = f.preprocess_targets(predict_dataframe)
 
 def my_input_fn(features, targets, batch_size=1, shuffle=True, num_epochs=None):
 
@@ -44,7 +50,7 @@ def train_model(
     validation_examples,
     validation_targets):
 
-    periods = 10
+    periods = 15
     steps_per_period = steps / periods
 
     # Create a linear regressor object.
@@ -67,11 +73,18 @@ def train_model(
         targets=validation_targets["actualTravelTimeSeconds"],
         num_epochs=1,
         shuffle=False)
+    predict_input_fn = lambda: my_input_fn(
+        features=predict_examples,
+        targets=predict_targets["actualTravelTimeSeconds"],
+        num_epochs=1,
+        shuffle=False)
 
     # Train the model, but do so inside a loop so that we can periodically assess
     # loss metrics.
     print("Training model...")
     print("RMSE (on training data):")
+    #file = open('training_output.txt', 'w')
+    #sys.stdout = file
     training_rmse = []
     validation_rmse = []
     for period in range (0, periods):
@@ -87,18 +100,29 @@ def train_model(
         validation_predictions = linear_regressor.predict(input_fn=predict_validation_input_fn)
         validation_predictions = np.array([item['predictions'][0] for item in validation_predictions])
 
+        predictions = linear_regressor.predict(input_fn=predict_input_fn)
+        predictions = np.array([item['predictions'][0] for item in predictions])
 
         #Compute training and validation loss.
         training_root_mean_squared_error = math.sqrt(
         metrics.mean_squared_error(training_predictions, training_targets))
         validation_root_mean_squared_error = math.sqrt(
         metrics.mean_squared_error(validation_predictions, validation_targets))
+
+        # R2 = r2_score(training_targets, training_predictions)
+        # print("The R-Squared value is:", R2)
         # Occasionally print the current loss.
         print("  period %02d : %0.2f" % (period, training_root_mean_squared_error))
+        if period == periods - 1:
+            print("The predicted value is:")
+            print(*predictions, sep = ", ")
+            R2 = r2_score(validation_targets, validation_predictions)
+            print("The R-Squared value is:", R2)
         # Add the loss metrics from this period to our list.
         training_rmse.append(training_root_mean_squared_error)
         validation_rmse.append(validation_root_mean_squared_error)
     print("Model training finished.")
+    #file.close()
 
     # Output a graph of loss metrics over periods.
     plt.ylabel("RMSE")
@@ -108,9 +132,19 @@ def train_model(
     plt.plot(training_rmse, label="training")
     plt.plot(validation_rmse, label="validation")
     plt.legend()
+    plt.savefig('rmse_figure.png')
     plt.show(block=True)
-    #fig=plt.figure()
-    #fig.savefig("figure.png")
+
+    # Output a graph of loss metrics over periods.
+    plt.ylabel("Predicted Value")
+    plt.xlabel("Actual Value")
+    plt.title("Actual Value vs. Predicted Value")
+    plt.tight_layout()
+    plt.xlim(0,200)
+    plt.ylim(0, 200)
+    plt.scatter(validation_targets, validation_predictions)
+    plt.savefig('prediction_fig.png')
+    plt.show(block=True)
 
     return linear_regressor
 
@@ -121,4 +155,5 @@ linear_regressor = train_model(
     training_examples=f.training_examples,
     training_targets=f.training_targets,
     validation_examples=f.validation_examples,
-    validation_targets=f.validation_targets)
+    validation_targets=f.validation_targets
+    )

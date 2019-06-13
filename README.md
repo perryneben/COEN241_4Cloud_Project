@@ -25,6 +25,14 @@ Machine Learning survey of different regression algorithms:
 	
 This will use 10k samples to train various regression algorithms and provie R-Squared values for each.
 
+Statistics of training/validation data can be obtained by running
+        
+      python feature.py
+
+Scatterplot and RMSE curve can be produced by running
+
+      python training.py
+      
 Use a trained model to predict a value:
 
 	python predictML.py
@@ -36,3 +44,7 @@ After having completed the above one needs to ensure the terminal is in the coen
 	python simulator.py
 
 Once the simulator is started, a user needs to input a start and end node on the city map.  The rows available are from A to L and the columns are from 0 to 8.  An example is a start point of A0 to L8.  These are two far edges on the city map.
+
+GCP training and deploying model followed the offical tutorial from Google:
+
+https://cloud.google.com/ml-engine/docs/algorithms/linear-start

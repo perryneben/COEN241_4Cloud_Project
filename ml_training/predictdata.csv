@@ -1,0 +1,9 @@
+"lengthFeet","speedLimit","numLanes","dividedTraffic","trafficLights","stopSigns","pedCrossings","dayOfWeek","holiday","timeOfDayMinutes","cloudWeather","cloudTraffic","cloudEvent","localWeather","localTraffic","localEvent","actualTravelTimeSeconds"
+600,55,2,0,2,0,2,0,0,333,3,0,0,3,0,0,19
+1200,25,1,0,1,3,0,6,0,568,2,3,0,2,3,0,129
+600,45,1,1,1,1,0,1,0,542,1,0,0,1,0,0,16
+300,55,1,0,0,0,0,0,0,381,1,0,0,2,0,0,5
+900,15,1,0,0,1,3,1,0,456,1,3,0,2,3,0,134
+2400,35,1,1,0,1,2,3,0,601,0,1,0,0,1,0,71
+2100,35,1,1,0,3,3,0,0,1059,1,2,0,1,2,0,120
+900,55,4,0,3,0,1,2,0,992,1,2,0,1,2,0,22

@@ -1,0 +1,39 @@
+Local Info:
+Training model...
+RMSE (on training data):
+2019-06-02 16:03:13.320702: I tensorflow/core/platform/cpu_feature_guard.cc:141] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+  period 00 : 113.92
+  period 01 : 102.73
+  period 02 : 92.57
+  period 03 : 83.96
+  period 04 : 78.45
+  period 05 : 75.41
+  period 06 : 73.83
+  period 07 : 72.22
+  period 08 : 71.73
+  period 09 : 71.42
+The predicted value is:
+29.698605, 88.34698, 80.780464, 38.112255, 94.86452, 140.86539, 27.499128, 147.10797, 129.7035, 90.827995
+The R-Squared value is: 0.31095719396631394
+
+Cloud Info:
+Training model...
+RMSE (on training data):
+2019-06-02 16:11:36.836410: I tensorflow/core/platform/cpu_feature_guard.cc:141] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+  period 00 : 113.26
+  period 01 : 102.02
+  period 02 : 91.75
+  period 03 : 83.63
+  period 04 : 77.69
+  period 05 : 74.24
+  period 06 : 72.42
+  period 07 : 71.60
+  period 08 : 70.92
+  period 09 : 70.51
+The predicted value is:
+30.701464, 87.58412, 80.68831, 38.51176, 94.59765, 139.11824, 28.33469, 145.82838, 128.35197, 90.25374
+The R-Squared value is: 0.3117443639741936
+Model training finished.
+
+
+
