@@ -31,8 +31,9 @@ def predict(variables):
     return brmodel.predict(vars)
 
 # Example code prdicting the travel time.
-
+'''
 exampleVars = [600, 15, 3, 1, 0, 1, 1, 5, 1, 1000, 1, 2, 0, 1, 2, 0]
 trainingData.printVars(exampleVars)
 predictedTime = predict(exampleVars)
 print("\nPredicted time: %d" % predictedTime)
+'''

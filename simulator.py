@@ -36,7 +36,7 @@ while(True):
     dijkstra_distance(startNode)
     nodesTraveled = route(endNode)
 
-    print('Final Route: ', nodesTraveled)
+    print('Default Algorithm Route: ', nodesTraveled)
     print('Total time traveled: ', round(endNode.distanceTime, 2))
 
     while startNode != endNode:
@@ -49,8 +49,8 @@ while(True):
         currentRoute = route(endNode)
 
         # try and get the shortest path
-        print('\nCurrent Planned Route: ', currentRoute)
-        print('Current Planned travel time: ', round(endNode.totalTime, 2))
+        print('\nCurrent ML Predicted Route: ', currentRoute)
+        print('Current ML Predicted travel time: ', round(endNode.totalTime, 2))
 
         if currentRoute:
             # set the next node as the new start to simulate having traveled there
