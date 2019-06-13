@@ -30,3 +30,6 @@ Use a trained model to predict a value:
 	python predictML.py
 	
 This will automatically use the training_samples_10k.csv.
+
+After having completed the above one needs to ensure the terminal is in the coen241_4cloud_project folder.  Once in this folder, to run the simulator, one needs to type "python simulator.py".
+Once the simulator is started, a user needs to input a start and end node on the city map.  The rows available are from A to L and the columns are from 0 to 8.  An example is a start point of A0 to L8.  These are two far edges on the city map.
