@@ -65,13 +65,6 @@ print(Y_train.shape)
 print(X_validation.shape)
 print(Y_validation.shape)
 
-# Stand alone example
-brmodel = BayesianRidge()
-brmodel.fit(X_train, Y_train)
-for i in range(20):
-   predicted = brmodel.predict(X_validation[i:(i+1):1])
-   print("Actual: %d, Predicted: %d" % (Y_validation[i:(i+1):1], predicted))
-
 models = []
 models.append(('LinearRegression', LinearRegression())) # r^2 of 0.774
 models.append(('Lasso', Lasso(alpha=0.1))) # r^2 of 0.773
